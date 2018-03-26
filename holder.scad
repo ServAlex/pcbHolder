@@ -3,8 +3,8 @@ tBarHeight = 15;
 tBarLength = 300;
 tBarThickness = 1;
 
+$fn = 30;
 
-tExtrusion(tBarLength, 0);
 
 module tExtrusion(lenth, expansion)
 {
@@ -15,11 +15,32 @@ module tExtrusion(lenth, expansion)
 	cube([lenth, tBarThickness + 2*expansion, tBarHeight + 2*expansion]);
 }
 
-translate([300/2 + 50, 0, 0])
-arm(100, 5/2);
-translate([300/2 - 50, 0, 0])
-rotate([0, 0, 180])
-arm(100, 5/2);
+
+difference()
+{
+	union()
+	{
+		tExtrusion(tBarLength, 0);
+
+		translate([300/2 + 50, 0, 0])
+		arm(100, 5/2);
+
+			
+		translate([300/2 - 50, 0, 0])
+		translate([-25/2, 0, 15/2])
+		rotate([0, 2.2, 0])
+		translate([25/2, 0, -15/2])
+		rotate([0, 0, 180])
+		arm(100, 5/2);
+	}
+/*
+	translate([0, 0, -100])
+	cube([1000, 1000, 1000]);
+
+	translate([0, -1000 - 2, -100])
+	cube([1000, 1000, 1000]);
+*/
+}
 
 
 module arm(h, circleR)
@@ -37,6 +58,11 @@ module arm(h, circleR)
 		{
 			translate([0, -armWidth/2, tBarHeight + topBridge])
 			cube([thickness, armWidth, h]);
+
+			translate([0, 0, tBarHeight + topBridge + h - armWidth/2])
+			rotate([0, 90, 0])
+			cylinder(r = circleR*3, h = thickness);
+
 
 			hull()
 			{
