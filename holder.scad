@@ -8,6 +8,9 @@ $fn = 30;
 assembly();
 //testPart();
 
+//roundedCube([10, 20, 5], 2);
+
+
 module tExtrusion(lenth, expansionHorizontal, expansionVertical)
 {
 	translate([0, -tBarWidth/2 - expansionHorizontal, tBarHeight-tBarThickness])
@@ -47,7 +50,9 @@ module assembly()
 			rotate([0, 0, 180])
 			arm(100, 5/2);
 
-			joint();	
+			joint(0);
+			translate([300 - 20, 0, 0])
+			joint(0);
 		}
 
 	/*
@@ -60,22 +65,60 @@ module assembly()
 	}
 }
 
-module joint()
+module joint(part)
 {
 	jointLen = 20;
 	boltingWidth = 8;
 	jointWidth = tBarWidth + 2*boltingWidth;
-	cupHeight = 5;
-	bottomHeight = 5;
+	cupHeight = 8;
+	bottomHeight = 6;
 
 	translate([0, 0, 0])
 	difference()
 	{
-		translate([0, -jointWidth/2, -bottomHeight])
-		cube([jointLen, jointWidth, tBarHeight - tBarThickness + bottomHeight]);
+		union()
+		{
+			if(part == 2 || part == 0)
+			{
+				translate([0, -jointWidth/2, -bottomHeight])
+				roundedCube([jointLen, jointWidth, tBarHeight - tBarThickness + bottomHeight], 5);
+
+				// mounting plate
+				translate([0, -jointWidth/2 - 10, -bottomHeight])
+				roundedCube([jointLen, jointWidth + 10*2, 8], 5);
+			}
+
+			if(part == 1 || part == 0)
+			// top lid
+			translate([0, -jointWidth/2, tBarHeight])
+			roundedCube([jointLen, jointWidth, cupHeight], 5);
+		}
 
 		translate([-1, 0, 0])
 		tExtrusion(jointLen+2, 0.3, 0);
+
+		translate([-1, -tBarThickness/2 - 0.3, -0.5])
+		cube([jointLen+2, tBarThickness + 0.3*2, 1]);
+		
+		for(i=[-1:2:1])
+		for(j=[-1:2:1])
+		{
+			// holes for bolts
+			translate([jointLen/2 +i*(jointLen/4), j*(tBarWidth/2 + 4/2), - bottomHeight + 3 + 0.2])
+			cylinder(r = 3.2/2, h = 40);
+
+			// sinkholes for bolt heads
+			translate([jointLen/2 +i*(jointLen/4), j*(tBarWidth/2 + 4/2), tBarHeight + cupHeight - 3])
+			cylinder(r = 6/2, h = 40);
+
+			// holes for nuts
+			translate([jointLen/2 +i*(jointLen/4), j*(tBarWidth/2 + 4/2), -10 - bottomHeight + 3])
+			cylinder(r = 6.2/2, $fn=6, h = 10);
+
+			// holes for wood screws
+			translate([jointLen/2 +i*(jointLen/4 + 0.5), j*(jointWidth/2 + 10-5), -10])
+			cylinder(r = 4/2, h = 40);
+		}
 	}
 }
 
@@ -133,6 +176,16 @@ module arm(h, circleR)
 		rotate([0, 90, 0])
 		translate([0, 0, -1])
 		cylinder(r = circleR, h = thickness + 2);
+	}
+}
+
+module roundedCube(v, rad)
+{
+	translate([rad, rad, 0])
+	minkowski()
+	{
+		cube(v - [rad*2, rad*2, 0]);
+		cylinder(r = rad, h = 0.01);
 	}
 }
 
