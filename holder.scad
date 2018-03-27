@@ -5,11 +5,16 @@ tBarThickness = 1.4;
 
 $fn = 30;
 
-assembly();
+// part for testing slot fit on t-bar
 //testPart();
 
-//roundedCube([10, 20, 5], 2);
+// whole assembly preview
+assembly();
 
+// separate parts, uncomment one by one for rendering separate models
+//arm(100, 5/2);
+//joint(1);
+//joint(2);
 
 module tExtrusion(lenth, expansionHorizontal, expansionVertical)
 {
@@ -131,7 +136,7 @@ module arm(h, circleR)
 	sleeveLen = 25;
 	armWidth = 10;
 
-	expansion = 0.5;
+	expansion = 0.3;
 
 	r = sleeveLen;
 	d = tBarHeight;
