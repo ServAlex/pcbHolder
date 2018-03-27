@@ -5,8 +5,8 @@ tBarThickness = 1.4;
 
 $fn = 30;
 
-//assembly();
-testPart();
+assembly();
+//testPart();
 
 module tExtrusion(lenth, expansionHorizontal, expansionVertical)
 {
@@ -25,7 +25,7 @@ module testPart()
 
 		translate([2, 10, -1])
 		rotate([0, -90, 180])
-		#tExtrusion(27, 0.3, 1);
+		#tExtrusion(27, 0, 0);
 	}
 }
 
@@ -35,7 +35,7 @@ module assembly()
 	{
 		union()
 		{
-			tExtrusion(tBarLength, 0);
+			tExtrusion(tBarLength, 0, 0);
 
 			translate([300/2 + 50, 0, 0])
 			arm(100, 5/2);
@@ -46,6 +46,8 @@ module assembly()
 	//		translate([25/2, 0, -15/2])
 			rotate([0, 0, 180])
 			arm(100, 5/2);
+
+			joint();	
 		}
 
 	/*
@@ -55,6 +57,25 @@ module assembly()
 		translate([-10, -1000 - 2, -100])
 		cube([1000, 1000, 1000]);
 	*/
+	}
+}
+
+module joint()
+{
+	jointLen = 20;
+	boltingWidth = 8;
+	jointWidth = tBarWidth + 2*boltingWidth;
+	cupHeight = 5;
+	bottomHeight = 5;
+
+	translate([0, 0, 0])
+	difference()
+	{
+		translate([0, -jointWidth/2, -bottomHeight])
+		cube([jointLen, jointWidth, tBarHeight - tBarThickness + bottomHeight]);
+
+		translate([-1, 0, 0])
+		tExtrusion(jointLen+2, 0.3, 0);
 	}
 }
 
@@ -106,7 +127,7 @@ module arm(h, circleR)
 		translate([sleeveLen/2, 0, tBarHeight/2])
 		rotate([0, angle, 0])
 		translate([-sleeveLen/2, 0, -tBarHeight/2])
-		tExtrusion(sleeveLen + 2, expansion);
+		tExtrusion(sleeveLen + 2, expansion, expansion);
 
 		translate([0, 0, tBarHeight + topBridge + h - armWidth/2])
 		rotate([0, 90, 0])
