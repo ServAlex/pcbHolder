@@ -114,15 +114,15 @@ module joint(part)
 		for(j=[-1:2:1])
 		{
 			// holes for bolts
-			translate([jointLen/2 +i*(jointLen/4), j*(tBarWidth/2 + 4/2), - bottomHeight + 3 + 0.2])
-			cylinder(r = 3.2/2, h = 40);
+			translate([jointLen/2 +i*(jointLen/4), j*(tBarWidth/2 + 4/2), - bottomHeight + 4 + 0.2])
+			cylinder(r = 3.3/2, h = 40);
 
 			// sinkholes for bolt heads
 			translate([jointLen/2 +i*(jointLen/4), j*(tBarWidth/2 + 4/2), tBarHeight + cupHeight - 3])
 			cylinder(r = 6/2, h = 40);
 
 			// holes for nuts
-			translate([jointLen/2 +i*(jointLen/4), j*(tBarWidth/2 + 4/2), -10 - bottomHeight + 3])
+			translate([jointLen/2 +i*(jointLen/4), j*(tBarWidth/2 + 4/2), -10 - bottomHeight + 4])
 			cylinder(r = 6.2/2, $fn=6, h = 10);
 
 			// holes for wood screws
@@ -156,7 +156,7 @@ module arm(h, circleR)
 			hull()
 			{
 				translate([0, -armWidth/2, tBarHeight + topBridge])
-				cube([thickness, armWidth, h-circleR*4]);
+				cube([thickness, armWidth, h-circleR*3]);
 
 				translate([0, -armWidth/2, tBarHeight + topBridge])
 				cube([sleeveLen, armWidth, 1]);
@@ -164,7 +164,7 @@ module arm(h, circleR)
 
 			translate([0, 0, tBarHeight + topBridge + h - armWidth/2])
 			rotate([0, 90, 0])
-			cylinder(r = circleR*3, h = thickness);
+			cylinder(r = circleR*2.5, h = thickness);
 
 			hull()
 			{
