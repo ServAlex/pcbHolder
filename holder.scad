@@ -7,7 +7,7 @@ tBarHeight = 15;
 tBarLength = 300;
 tBarThickness = 1.4;
 
-$fn = 30;
+$fn = 50;
 
 // part for testing slot fit on t-bar
 //testPart();
@@ -21,7 +21,14 @@ $fn = 30;
 //joint(1);
 //joint(2);
 //wingedNut();
-jawsAssembly(6/2);
+//jawsAssembly(6/2);
+
+// jaw parts
+shaftR = 6/2;
+ballExpansion = 0.2;
+//ball(shaftR, shaftR*2, wall = 1.5);
+//jaw(shaftR*2 + ballExpansion, 1.5, width = 40, height = 19/2, mode = 4);
+jaw(shaftR*2 + ballExpansion, 1.5, width = 40, height = 19/2, mode = 5);
 
 // testing rounded cube
 //roundedCube([10, 20, 5], 4, [0, 0, 0, 1]);

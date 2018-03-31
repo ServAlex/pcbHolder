@@ -2,21 +2,26 @@ include <wedge.scad>;
 
 module jawsAssembly(shaftR)
 {
-/*
+	expansion = 0.2;
+
+	translate([0, -shaftR*2*2.5 - expansion, 19/2])
+	rotate([90, 0, 180])
 	difference()
 	{
-		ball(shaftR, shaftR*2);
-		translate([-50, 0, -20])
-		cube([100, 100, 100]);
+		ball(shaftR, shaftR*2, wall = 1);
+//		translate([-50, 0, -20])
+//		cube([100, 100, 100]);
 	}
-*/
 
-	jawBlank(shaftR*2, 1.5, 30, 19/2, 5);
+	jaw(shaftR*2 + expansion, 1.5, 40, 19/2, 4);
 
-	//wedge(40, 5, 35);
+	translate([0, 0, 19])
+	rotate([0, 180, 0])
+	jaw(shaftR*2 + expansion, 1.5, 40, 19/2, 5);
+
 }
 
-module jawBlank(sphereR, minWallThickness, width, height, mode = 2)
+module jaw(sphereR, minWallThickness, width, height, mode = 2)
 {
 	// mode == 1 no screw hole
 	// mode == 2 screw hole for thread
@@ -73,7 +78,7 @@ module jawBlank(sphereR, minWallThickness, width, height, mode = 2)
 		translate([-width/2, -jointSinkDistance, 0])
 		cube([width, surrationsDepth + 2 + jointSinkDistance, totalHeight]);
 
-		translate([0, 0, ballShellOutterR])
+		translate([0, 0, totalHeight])
 		rotate([90, 0, 0])
 		cylinder(r = ballShellOutterR + 2, h = ballShellLen);
 
@@ -110,7 +115,7 @@ module jawBlank(sphereR, minWallThickness, width, height, mode = 2)
 	}
 }
 
-module ball(shaftR, sphereR)
+module ball(shaftR, sphereR, wall = 1)
 {
 	difference()
 	{
@@ -119,7 +124,7 @@ module ball(shaftR, sphereR)
 			translate([0, 0, sphereR*1.5])
 			sphere(r = sphereR);
 
-			cylinder(r = shaftR+1, h = shaftR*4);
+			cylinder(r = shaftR+wall, h = shaftR*4);
 		}
 
 		translate([0, 0, shaftR*3.8])
