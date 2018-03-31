@@ -1,3 +1,7 @@
+include <wingedNut.scad>;
+include <roundedCube.scad>;
+include <jaws.scad>;
+
 tBarWidth = 15;
 tBarHeight = 15;
 tBarLength = 300;
@@ -9,53 +13,20 @@ $fn = 30;
 //testPart();
 
 // whole assembly preview
-assembly();
+//assembly();
+
 
 // separate parts, uncomment one by one for rendering separate models
 //arm(100, 5/2);
 //joint(1);
 //joint(2);
-// winged nut
-//nut();
+//wingedNut();
+jawsAssembly(6/2);
 
 // testing rounded cube
 //roundedCube([10, 20, 5], 4, [0, 0, 0, 1]);
 //roundedCube([10, 20, 5], 2);
 
-
-module nut()
-{
-	rad1 = 5.2/2;
-	rad2 = 12/2;
-	coneR = 4;
-	bodyR = rad2 + 1;
-	height = 10;
-	wingLen = 30;
-
-
-	difference()
-	{
-		union()
-		{
-			cylinder(r = bodyR, h = height);
-
-			for(i=[-1:2:1])
-			hull()
-			{
-				cylinder(r = bodyR, h = height-2.5);
-				
-				translate([wingLen*i, 0, 0])
-				cylinder(r = 2, h = height+4);
-			}
-		}
-
-		translate([0, 0, -1])
-		cylinder(r = rad1, h = height + 5);
-
-		translate([0, 0, height - (rad2 - rad1) + 0.01])
-		cylinder(r1 = rad1, r2 = rad2, h = (rad2-rad1));
-	}
-}
 
 module tExtrusion(lenth, expansionHorizontal, expansionVertical)
 {
@@ -86,19 +57,23 @@ module assembly()
 		{
 			tExtrusion(tBarLength, 0, 0);
 
-			translate([300/2 + 50, 0, 0])
-			arm(100, 5/2);
+			for(i = [-1:2:1])
+			{
+				translate([300/2 + 50*i, 0, 0])
+				rotate([0, 0, 180*(i-1)/2])
+				arm(100, 5/2);
 
-			translate([300/2 - 50, 0, 0])
-	//		translate([-25/2, 0, 15/2])
-	//		rotate([0, 2.2, 0])
-	//		translate([25/2, 0, -15/2])
-			rotate([0, 0, 180])
-			arm(100, 5/2);
+				translate([300/2 + (50 + 30)*i, 0, 100 + tBarHeight + 5])
+				rotate([0, 90*i, 0])
+				wingedNut();
 
-			joint(0);
-			translate([300 - 20, 0, 0])
-			joint(0);
+				translate([300/2 + (50 + 30)*i, 0, 100 + tBarHeight+ 5])
+				rotate([0, 90*i, 0])
+				jawsAssembly();
+
+				translate([(300 - 20)*(i+1)/2, 0, 0])
+				joint(0);
+			}
 		}
 
 	/*
@@ -227,29 +202,3 @@ module arm(h, circleR)
 	}
 }
 
-module roundedCube(v, radius, angles)
-{
-	rad = min(radius, min(v[0]/2, v[1]/2)-0.001);
-
-	translate([rad, rad, 0])
-	minkowski()
-	{
-		cube(v - [rad*2, rad*2, 0]);
-		cylinder(r = rad, h = 0.01);
-	}
-
-	corners = [[0, 0], [0, 1], [1, 1], [1, 0]];
-	for(a=[0:len(angles)-1])
-	{
-//		i = a%2;
-//		j = floor(a/2)%2;
-		i = corners[a][0];
-		j = corners[a][1];
-		echo(concat(str(a), str(angles[a]), str(i), str(j) ));
-		if(angles[a]==1)
-		{
-			translate([(v[0] - rad)*i , (v[1] - rad)*j, 0])
-			cube([rad, rad, v[2]]);
-		}
-	}
-}
