@@ -74,9 +74,9 @@ module assembly()
 				rotate([0, 90*i, 0])
 				wingedNut();
 
-				translate([300/2 + (50 + 30)*i, 0, 100 + tBarHeight+ 5])
-				rotate([0, 90*i, 0])
-				jawsAssembly();
+				translate([300/2 + ( 30)*i, 0, 100 + tBarHeight+ 5 - 19/2])
+				rotate([0, 0, 90*i])
+				jawsAssembly(6/2);
 
 				translate([(300 - 20)*(i+1)/2, 0, 0])
 				joint(0);
