@@ -94,10 +94,10 @@ module jaw(sphereR, minWallThickness, width, height, mode = 2)
 
 			if(mode==4)
 			// planning for bolt heads
-			cylinder(r = 5/2, h = 3 + 1);
+			cylinder(r = 5.8/2, h = 3 + 1);
 
 			if(mode==5)
-			cylinder(r = 6.2/2, $fn=6, h = 3 + 1);
+			cylinder(r = 6.8/2, $fn=6, h = 3 + 1);
 		}
 
 		// surrations

@@ -13,7 +13,7 @@ $fn = 50;
 //testPart();
 
 // whole assembly preview
-//assembly();
+assembly();
 
 
 // separate parts, uncomment one by one for rendering separate models
@@ -25,10 +25,10 @@ $fn = 50;
 
 // jaw parts
 shaftR = 6/2;
-ballExpansion = 0.2;
+ballExpansion = 0.0;
 //ball(shaftR, shaftR*2, wall = 1.5);
 //jaw(shaftR*2 + ballExpansion, 1.5, width = 40, height = 19/2, mode = 4);
-jaw(shaftR*2 + ballExpansion, 1.5, width = 40, height = 19/2, mode = 5);
+//jaw(shaftR*2 + ballExpansion, 1.5, width = 40, height = 19/2, mode = 5);
 
 // testing rounded cube
 //roundedCube([10, 20, 5], 4, [0, 0, 0, 1]);
