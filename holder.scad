@@ -70,6 +70,9 @@ module assembly()
 				rotate([0, 0, 180*(i-1)/2])
 				arm(100, 5/2);
 
+				translate([300/2, 0, 0])
+				stabilizerArm();
+
 				translate([300/2 + (50 + 30)*i, 0, 100 + tBarHeight + 5])
 				rotate([0, 90*i, 0])
 				wingedNut();
@@ -147,6 +150,54 @@ module joint(part)
 			translate([jointLen/2 +i*(jointLen/4 + 0.5), j*(jointWidth/2 + 10-5), -10])
 			cylinder(r = 4/2, h = 40);
 		}
+	}
+}
+
+module stabilizerArm()
+{
+	// account for ledder wall width on gap placement
+	// not in variable yet
+
+	extra = 5;
+	thickness = 15;
+	topBridge = 10;
+	bridge = 5;
+	sleeveWindowWidth = 3;
+	sleeveGap = 8;
+	sleeveLen = sleeveWindowWidth*2+sleeveGap;
+	armWidth = 10;
+
+	expansion = 0.3;
+
+	windowWidth = 5;
+	windowLength = 7;
+	crossPinFixationLen = 2;
+
+	difference()
+	{
+		union()
+		{
+			hull()
+			{
+				translate([0, -armWidth/2, tBarHeight + expansion + crossPinFixationLen + 1 + windowLength + 2])
+				rotate([0, 90, 0])
+				roundedCube([3, armWidth, sleeveLen], 1);
+
+				translate([0, -tBarWidth/2 - extra, -bridge])
+				translate([sleeveLen, 0, 0])
+				rotate([0, -90, 0])
+				roundedCube([tBarHeight + bridge*2, tBarWidth + extra*2, sleeveLen], 2);
+			}
+		}
+
+		translate([sleeveWindowWidth, -tBarWidth/2 - extra -1, tBarHeight + expansion + crossPinFixationLen])
+		cube([sleeveGap, tBarWidth + extra*2 + 2, windowLength + 1 + 2 + 1]);
+
+		translate([-1, -windowWidth/2, tBarHeight + expansion + crossPinFixationLen + 1])
+		cube([sleeveLen+2, windowWidth, windowLength]);
+
+		translate([-1, 0, -expansion])
+		tExtrusion(sleeveLen + 2, expansion, expansion);
 	}
 }
 
