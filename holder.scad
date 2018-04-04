@@ -13,7 +13,7 @@ $fn = 50;
 //testPart();
 
 // whole assembly preview
-assembly();
+//assembly();
 
 
 // separate parts, uncomment one by one for rendering separate models
@@ -29,6 +29,8 @@ ballExpansion = 0.0;
 //ball(shaftR, shaftR*2, wall = 1.5);
 //jaw(shaftR*2 + ballExpansion, 1.5, width = 40, height = 19/2, mode = 4);
 //jaw(shaftR*2 + ballExpansion, 1.5, width = 40, height = 19/2, mode = 5);
+
+stabilizerArm(3);
 
 // testing rounded cube
 //roundedCube([10, 20, 5], 4, [0, 0, 0, 1]);
@@ -71,7 +73,7 @@ module assembly()
 				arm(100, 5/2);
 
 				translate([300/2, 0, 0])
-				stabilizerArm();
+				stabilizerArm(0);
 
 				translate([300/2 + (50 + 30)*i, 0, 100 + tBarHeight + 5])
 				rotate([0, 90*i, 0])
@@ -169,11 +171,11 @@ module stabilizerArm(part = 0)
 	windowWidth = 5;
 	windowLength = 7;
 	crossPinFixationLen = 2;
-	ledderWallWidth = 1.6;
-	windowTopBridge = ledderWallWidth;
-	desiredLedderLength = 90;
-	windowsCount = floor((desiredLedderLength - ledderWallWidth)/(windowWidth + ledderWallWidth));
-	ledderLength = windowsCount*(windowWidth + ledderWallWidth) + ledderWallWidth;
+	ladderWallWidth = 1.6;
+	windowTopBridge = ladderWallWidth;
+	desiredLadderLength = 90;
+	windowsCount = floor((desiredLadderLength - ladderWallWidth)/(windowWidth + ladderWallWidth));
+	ladderLength = windowsCount*(windowWidth + ladderWallWidth) + ladderWallWidth;
 
 	// rail sleeve
 	if(part == 0 || part == 1)
@@ -183,7 +185,7 @@ module stabilizerArm(part = 0)
 		{
 			hull()
 			{
-				translate([0, -armWidth/2, tBarHeight + expansion + crossPinFixationLen + ledderWallWidth + windowLength + windowTopBridge])
+				translate([0, -armWidth/2, tBarHeight + expansion + crossPinFixationLen + ladderWallWidth + windowLength + windowTopBridge])
 				rotate([0, 90, 0])
 				roundedCube([3, armWidth, sleeveLen], 1);
 
@@ -197,67 +199,73 @@ module stabilizerArm(part = 0)
 		translate([sleeveWindowWidth, -tBarWidth/2 - extra -1, tBarHeight + expansion + crossPinFixationLen])
 		cube([sleeveGap, tBarWidth + extra*2 + 2, windowLength + 1 + 2 + 1]);
 
-		translate([-1, -windowWidth/2, tBarHeight + expansion + crossPinFixationLen + ledderWallWidth])
+		translate([-1, -windowWidth/2, tBarHeight + expansion + crossPinFixationLen + ladderWallWidth])
 		cube([sleeveLen+2, windowWidth, windowLength]);
 
 		translate([-1, 0, -expansion])
 		tExtrusion(sleeveLen + 2, expansion, expansion);
 	}
 
-	// ledder
+	// ladder
 	if(part == 0 || part == 2)
 	{
-		translate([sleeveWindowWidth, -windowWidth/2 - ledderWallWidth, tBarHeight + expansion + crossPinFixationLen])
+		translate([sleeveWindowWidth, -windowWidth/2 - ladderWallWidth, tBarHeight + expansion + crossPinFixationLen])
 		difference()
 		{
-			cube([sleeveGap, ledderLength, ledderWallWidth*2 + windowLength]);
+			cube([sleeveGap, ladderLength, ladderWallWidth*2 + windowLength]);
 
 			for(i = [0:1:windowsCount-1])
-			translate([-1, ledderWallWidth + (windowWidth + ledderWallWidth)*i, ledderWallWidth])
+			translate([-1, ladderWallWidth + (windowWidth + ladderWallWidth)*i, ladderWallWidth])
 			cube([sleeveGap + 2, windowWidth, windowLength]);
 		}
 	}
 
-	// ledder cross pin
+	// ladder cross pin
 	if(part == 0 || part == 3)
 	{
-		translate([-2, -windowWidth/2, tBarHeight + expansion + crossPinFixationLen + ledderWallWidth - crossPinFixationLen])
+		translate([-2, -windowWidth/2, tBarHeight + expansion + crossPinFixationLen + ladderWallWidth - crossPinFixationLen])
 		difference()
 		{
-			translate([0, windowWidth, 0])
-			rotate([90, 0, 0])
-			roundedCube([sleeveLen + 4 + 5, windowLength, windowWidth], 2);
-// - crossPinFixationLen
+			union()
+			{
+				translate([0, windowWidth, 0])
+				rotate([90, 0, 0])
+				roundedCube([sleeveLen + 4 + 5, windowLength-0.5, windowWidth-0.5], 2);
 
-			translate([2, -1, -1])
-			cube([sleeveLen, windowWidth + 2, crossPinFixationLen + 1]);
+				translate([0, windowWidth, +0.25 -2])
+				rotate([90, 0, 0])
+				roundedCube([7, windowLength - 0.5 + 4, windowWidth-0.5], 2);
+			}
+			
+			translate([3, 0, windowLength/2])
+			rotate([-90, 0, 0])
+			cylinder(r = 1.5, h = 20);
 		}
-		
 	}
 
-	desiredVerticalLedderLength = 100;
-	verticalWindowsCount = floor((desiredVerticalLedderLength - ledderWallWidth)/(windowLength+ ledderWallWidth));
-	verticalLedderLength = verticalWindowsCount*(windowLength+ ledderWallWidth) + ledderWallWidth;
+	desiredVerticalLadderLength = 100;
+	verticalWindowsCount = floor((desiredVerticalLadderLength - ladderWallWidth)/(windowLength+ ladderWallWidth));
+	verticalLadderLength = verticalWindowsCount*(windowLength+ ladderWallWidth) + ladderWallWidth;
 
-	// vertical ledder
+	// vertical ladder
 	if(part == 0 || part == 4)
-	translate([ledderWallWidth, ledderLength - (windowWidth+ledderWallWidth)*0, tBarHeight + expansion + crossPinFixationLen])
+	translate([ladderWallWidth, ladderLength - (windowWidth+ladderWallWidth)*0, tBarHeight + expansion + crossPinFixationLen])
 	difference()
 	{
-		cube([sleeveGap + 2*ledderWallWidth, windowWidth+ledderWallWidth*5 + 0.5, verticalLedderLength]);
+		cube([sleeveGap + 2*ladderWallWidth, windowWidth+ladderWallWidth*5 + 0.5, verticalLadderLength]);
 
-		translate([ledderWallWidth, ledderWallWidth, -1])
-		cube([sleeveGap, windowWidth+ledderWallWidth*3+0.5, verticalLedderLength+ 2]);
+		translate([ladderWallWidth, ladderWallWidth, -1])
+		cube([sleeveGap, windowWidth+ladderWallWidth*3+0.5, verticalLadderLength+ 2]);
 
 		for(i=[0:verticalWindowsCount-1])
-		translate([-1, ledderWallWidth*3, ledderWallWidth + (ledderWallWidth + windowLength)*i])
-		cube([sleeveGap+2 + 2*ledderWallWidth, windowWidth, windowLength]);
+		translate([-1, ladderWallWidth*3, ladderWallWidth + (ladderWallWidth + windowLength)*i])
+		cube([sleeveGap+2 + 2*ladderWallWidth, windowWidth, windowLength]);
 
-		translate([ledderWallWidth - ledderWallWidth - 0.2, ledderWallWidth, -1])
-		cube([ledderWallWidth, ledderWallWidth, verticalLedderLength+ 2]);
+		translate([ladderWallWidth - ladderWallWidth - 0.2, ladderWallWidth, -1])
+		cube([ladderWallWidth, ladderWallWidth, verticalLadderLength+ 2]);
 
-		translate([sleeveGap + 1*ledderWallWidth-1, ledderWallWidth, -1])
-		cube([ledderWallWidth+2, ledderWallWidth, verticalLedderLength+ 2]);
+		translate([sleeveGap + 1*ladderWallWidth-1, ladderWallWidth, -1])
+		cube([ladderWallWidth+2, ladderWallWidth, verticalLadderLength+ 2]);
 	}
 }
 
