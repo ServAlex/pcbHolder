@@ -153,11 +153,8 @@ module joint(part)
 	}
 }
 
-module stabilizerArm()
+module stabilizerArm(part = 0)
 {
-	// account for ledder wall width on gap placement
-	// not in variable yet
-
 	extra = 5;
 	thickness = 15;
 	topBridge = 10;
@@ -172,14 +169,21 @@ module stabilizerArm()
 	windowWidth = 5;
 	windowLength = 7;
 	crossPinFixationLen = 2;
+	ledderWallWidth = 1.6;
+	windowTopBridge = ledderWallWidth;
+	desiredLedderLength = 90;
+	windowsCount = floor((desiredLedderLength-ledderWallWidth)/(windowWidth + ledderWallWidth));
+	ledderLength = windowsCount*(windowWidth + ledderWallWidth) + ledderWallWidth;
 
+	// rail sleeve
+	if(part == 0 || part == 1)
 	difference()
 	{
 		union()
 		{
 			hull()
 			{
-				translate([0, -armWidth/2, tBarHeight + expansion + crossPinFixationLen + 1 + windowLength + 2])
+				translate([0, -armWidth/2, tBarHeight + expansion + crossPinFixationLen + ledderWallWidth + windowLength + windowTopBridge])
 				rotate([0, 90, 0])
 				roundedCube([3, armWidth, sleeveLen], 1);
 
@@ -193,11 +197,31 @@ module stabilizerArm()
 		translate([sleeveWindowWidth, -tBarWidth/2 - extra -1, tBarHeight + expansion + crossPinFixationLen])
 		cube([sleeveGap, tBarWidth + extra*2 + 2, windowLength + 1 + 2 + 1]);
 
-		translate([-1, -windowWidth/2, tBarHeight + expansion + crossPinFixationLen + 1])
+		translate([-1, -windowWidth/2, tBarHeight + expansion + crossPinFixationLen + ledderWallWidth])
 		cube([sleeveLen+2, windowWidth, windowLength]);
 
 		translate([-1, 0, -expansion])
 		tExtrusion(sleeveLen + 2, expansion, expansion);
+	}
+
+	// ledder
+	if(part == 0 || part == 2)
+	{
+		translate([sleeveWindowWidth, -windowWidth/2 - ledderWallWidth, tBarHeight + expansion + crossPinFixationLen])
+		difference()
+		{
+			cube([sleeveGap, ledderLength, ledderWallWidth*2 + windowLength]);
+
+			for(i = [0:1:windowsCount-1])
+			translate([-1, ledderWallWidth + (windowWidth + ledderWallWidth)*i, ledderWallWidth])
+			cube([sleeveGap + 2, windowWidth, windowLength]);
+		}
+	}
+
+	// ledder cross pin
+	if(part == 0 || part == 3)
+	{
+	
 	}
 }
 
