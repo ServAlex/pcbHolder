@@ -172,7 +172,7 @@ module stabilizerArm(part = 0)
 	ledderWallWidth = 1.6;
 	windowTopBridge = ledderWallWidth;
 	desiredLedderLength = 90;
-	windowsCount = floor((desiredLedderLength-ledderWallWidth)/(windowWidth + ledderWallWidth));
+	windowsCount = floor((desiredLedderLength - ledderWallWidth)/(windowWidth + ledderWallWidth));
 	ledderLength = windowsCount*(windowWidth + ledderWallWidth) + ledderWallWidth;
 
 	// rail sleeve
@@ -221,7 +221,43 @@ module stabilizerArm(part = 0)
 	// ledder cross pin
 	if(part == 0 || part == 3)
 	{
-	
+		translate([-2, -windowWidth/2, tBarHeight + expansion + crossPinFixationLen + ledderWallWidth - crossPinFixationLen])
+		difference()
+		{
+			translate([0, windowWidth, 0])
+			rotate([90, 0, 0])
+			roundedCube([sleeveLen + 4 + 5, windowLength, windowWidth], 2);
+// - crossPinFixationLen
+
+			translate([2, -1, -1])
+			cube([sleeveLen, windowWidth + 2, crossPinFixationLen + 1]);
+		}
+		
+	}
+
+	desiredVerticalLedderLength = 100;
+	verticalWindowsCount = floor((desiredVerticalLedderLength - ledderWallWidth)/(windowLength+ ledderWallWidth));
+	verticalLedderLength = verticalWindowsCount*(windowLength+ ledderWallWidth) + ledderWallWidth;
+
+	// vertical ledder
+	if(part == 0 || part == 4)
+	translate([ledderWallWidth, ledderLength - (windowWidth+ledderWallWidth)*0, tBarHeight + expansion + crossPinFixationLen])
+	difference()
+	{
+		cube([sleeveGap + 2*ledderWallWidth, windowWidth+ledderWallWidth*5 + 0.5, verticalLedderLength]);
+
+		translate([ledderWallWidth, ledderWallWidth, -1])
+		cube([sleeveGap, windowWidth+ledderWallWidth*3+0.5, verticalLedderLength+ 2]);
+
+		for(i=[0:verticalWindowsCount-1])
+		translate([-1, ledderWallWidth*3, ledderWallWidth + (ledderWallWidth + windowLength)*i])
+		cube([sleeveGap+2 + 2*ledderWallWidth, windowWidth, windowLength]);
+
+		translate([ledderWallWidth - ledderWallWidth - 0.2, ledderWallWidth, -1])
+		cube([ledderWallWidth, ledderWallWidth, verticalLedderLength+ 2]);
+
+		translate([sleeveGap + 1*ledderWallWidth-1, ledderWallWidth, -1])
+		cube([ledderWallWidth+2, ledderWallWidth, verticalLedderLength+ 2]);
 	}
 }
 
