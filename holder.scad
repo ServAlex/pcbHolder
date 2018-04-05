@@ -252,22 +252,28 @@ module stabilizerArm(part = 0)
 	translate([ladderWallWidth, ladderLength - (windowWidth+ladderWallWidth)*0, tBarHeight + expansion + crossPinFixationLen])
 	difference()
 	{
+		// main body
 		cube([sleeveGap + 2*ladderWallWidth, windowWidth+ladderWallWidth*5 + 0.5, verticalLadderLength]);
 
-		translate([ladderWallWidth, ladderWallWidth, -1])
-		cube([sleeveGap, windowWidth+ladderWallWidth*3+0.5-0.2, verticalLadderLength+ 2]);
+		// middle cut
+		translate([ladderWallWidth+0.2, ladderWallWidth, -1])
+		cube([sleeveGap-0.2, windowWidth+ladderWallWidth*3+0.5, verticalLadderLength+ 2]);
 
+		// windows
 		for(i=[0:verticalWindowsCount-1])
 		translate([-1, ladderWallWidth*3, ladderWallWidth + (ladderWallWidth + windowLength)*i])
 		cube([sleeveGap+2 + 2*ladderWallWidth, windowWidth, windowLength]);
 
+		// helper bridges
 		for(i=[0:verticalWindowsCount-1])
 		translate([ladderWallWidth, ladderWallWidth*(3-2), ladderWallWidth + (ladderWallWidth + windowLength)*i])
 		cube([sleeveGap, windowWidth+ladderWallWidth+0.5+2*ladderWallWidth, windowLength]);
 
-		translate([ladderWallWidth - ladderWallWidth - 0.2, ladderWallWidth, -1])
-		cube([ladderWallWidth, ladderWallWidth, verticalLadderLength+ 2]);
+		// top separation cut
+		translate([ladderWallWidth - ladderWallWidth - 1, ladderWallWidth, -1])
+		cube([ladderWallWidth+1, ladderWallWidth, verticalLadderLength+ 2]);
 
+		// bottom separation cut
 		translate([sleeveGap + 1*ladderWallWidth-1, ladderWallWidth, -1])
 		cube([ladderWallWidth+2, ladderWallWidth, verticalLadderLength+ 2]);
 	}
