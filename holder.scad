@@ -30,7 +30,7 @@ ballExpansion = 0.0;
 //jaw(shaftR*2 + ballExpansion, 1.5, width = 40, height = 19/2, mode = 4);
 //jaw(shaftR*2 + ballExpansion, 1.5, width = 40, height = 19/2, mode = 5);
 
-stabilizerArm(3);
+stabilizerArm(4);
 
 // testing rounded cube
 //roundedCube([10, 20, 5], 4, [0, 0, 0, 1]);
@@ -255,11 +255,15 @@ module stabilizerArm(part = 0)
 		cube([sleeveGap + 2*ladderWallWidth, windowWidth+ladderWallWidth*5 + 0.5, verticalLadderLength]);
 
 		translate([ladderWallWidth, ladderWallWidth, -1])
-		cube([sleeveGap, windowWidth+ladderWallWidth*3+0.5, verticalLadderLength+ 2]);
+		cube([sleeveGap, windowWidth+ladderWallWidth*3+0.5-0.2, verticalLadderLength+ 2]);
 
 		for(i=[0:verticalWindowsCount-1])
 		translate([-1, ladderWallWidth*3, ladderWallWidth + (ladderWallWidth + windowLength)*i])
 		cube([sleeveGap+2 + 2*ladderWallWidth, windowWidth, windowLength]);
+
+		for(i=[0:verticalWindowsCount-1])
+		translate([ladderWallWidth, ladderWallWidth*(3-2), ladderWallWidth + (ladderWallWidth + windowLength)*i])
+		cube([sleeveGap, windowWidth+ladderWallWidth+0.5+2*ladderWallWidth, windowLength]);
 
 		translate([ladderWallWidth - ladderWallWidth - 0.2, ladderWallWidth, -1])
 		cube([ladderWallWidth, ladderWallWidth, verticalLadderLength+ 2]);
