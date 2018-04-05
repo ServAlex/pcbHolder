@@ -253,11 +253,12 @@ module stabilizerArm(part = 0)
 	difference()
 	{
 		// main body
-		cube([sleeveGap + 2*ladderWallWidth, windowWidth+ladderWallWidth*5 + 0.5, verticalLadderLength]);
+		translate([0, ladderWallWidth-0.8, 0])
+		cube([sleeveGap + 2*ladderWallWidth, windowWidth+ladderWallWidth*5 + 0.5 -ladderWallWidth + 0.8, verticalLadderLength]);
 
 		// middle cut
-		translate([ladderWallWidth+0.2, ladderWallWidth, -1])
-		cube([sleeveGap-0.2, windowWidth+ladderWallWidth*3+0.5, verticalLadderLength+ 2]);
+		translate([ladderWallWidth+0.4, ladderWallWidth, -1])
+		cube([sleeveGap-0.4, windowWidth+ladderWallWidth*3+0.5, verticalLadderLength+ 2]);
 
 		// windows
 		for(i=[0:verticalWindowsCount-1])
@@ -270,8 +271,8 @@ module stabilizerArm(part = 0)
 		cube([sleeveGap, windowWidth+ladderWallWidth+0.5+2*ladderWallWidth, windowLength]);
 
 		// top separation cut
-		translate([ladderWallWidth - ladderWallWidth - 1, ladderWallWidth, -1])
-		cube([ladderWallWidth+1, ladderWallWidth, verticalLadderLength+ 2]);
+		translate([ladderWallWidth - ladderWallWidth - 1, ladderWallWidth*0, -1])
+		cube([ladderWallWidth+1, ladderWallWidth*2, verticalLadderLength+ 2]);
 
 		// bottom separation cut
 		translate([sleeveGap + 1*ladderWallWidth-1, ladderWallWidth, -1])
