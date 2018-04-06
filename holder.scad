@@ -255,7 +255,8 @@ module stabilizerArm(part = 0)
 	difference()
 	{
 		// main body
-		cube([sleeveGap + 2*ladderWallWidth, windowWidth+ladderWallWidth*5 + 0.5, verticalLadderLength]);
+		translate([0, ladderWallWidth-0.8, 0])
+		cube([sleeveGap + 2*ladderWallWidth, windowWidth+ladderWallWidth*5 + 0.5 -ladderWallWidth + 0.8, verticalLadderLength]);
 
 		// middle cut
 		translate([ladderWallWidth-fittingExpansion, ladderWallWidth, -1])
