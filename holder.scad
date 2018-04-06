@@ -248,6 +248,8 @@ module stabilizerArm(part = 0)
 	verticalLadderLength = verticalWindowsCount*(windowLength+ ladderWallWidth) + ladderWallWidth;
 
 	// vertical ladder
+	fittingExpansion = 0.2;
+	bridgeThickness = 0.4;
 	if(part == 0 || part == 4)
 	translate([ladderWallWidth, ladderLength - (windowWidth+ladderWallWidth)*0, tBarHeight + expansion + crossPinFixationLen])
 	difference()
@@ -256,8 +258,8 @@ module stabilizerArm(part = 0)
 		cube([sleeveGap + 2*ladderWallWidth, windowWidth+ladderWallWidth*5 + 0.5, verticalLadderLength]);
 
 		// middle cut
-		translate([ladderWallWidth+0.2, ladderWallWidth, -1])
-		cube([sleeveGap-0.2, windowWidth+ladderWallWidth*3+0.5, verticalLadderLength+ 2]);
+		translate([ladderWallWidth-fittingExpansion, ladderWallWidth, -1])
+		cube([sleeveGap+fittingExpansion, windowWidth+ladderWallWidth*3+0.5, verticalLadderLength+ 2]);
 
 		// windows
 		for(i=[0:verticalWindowsCount-1])
@@ -266,11 +268,11 @@ module stabilizerArm(part = 0)
 
 		// helper bridges
 		for(i=[0:verticalWindowsCount-1])
-		translate([ladderWallWidth, ladderWallWidth*(3-2), ladderWallWidth + (ladderWallWidth + windowLength)*i])
-		cube([sleeveGap, windowWidth+ladderWallWidth+0.5+2*ladderWallWidth, windowLength]);
+		translate([ladderWallWidth - 0.4, ladderWallWidth*(3-2), ladderWallWidth + (ladderWallWidth + windowLength)*i])
+		cube([sleeveGap + 0.4, windowWidth+ladderWallWidth+0.5+2*ladderWallWidth, windowLength]);
 
 		// top separation cut
-		translate([ladderWallWidth - ladderWallWidth - 1, ladderWallWidth, -1])
+		translate([ladderWallWidth - ladderWallWidth - 1 - bridgeThickness, ladderWallWidth, -1])
 		cube([ladderWallWidth+1, ladderWallWidth, verticalLadderLength+ 2]);
 
 		// bottom separation cut
